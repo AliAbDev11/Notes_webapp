@@ -79,19 +79,6 @@
           <script type="text/javascript"
           src="{{ url_for('static', filename='index.js') }}"
           ></script>
-          <script type="text/javascript">
-            // Function to hide flash messages after a given duration
-            function hideFlashMessages() {
-                var flashMessages = document.querySelectorAll('.flash-message');
-                flashMessages.forEach(function(message) {
-                    setTimeout(function() {
-                        message.style.display = 'none';
-                    }, 2000); // 2000 milliseconds = 2 seconds
-                });
-            }
-            // Call the function when the page loads
-            window.onload = hideFlashMessages;
-          </script>
         {% endblock %}
     </body>
 </html>
