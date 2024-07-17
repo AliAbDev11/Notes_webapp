@@ -11,11 +11,11 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        
-        user = User.query.filter_by(email = email).first()
+
+        user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                flash('Logged successfully', category='success')
+                flash('Logged in successfully', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
             else:
@@ -23,8 +23,6 @@ def login():
         else:
             flash('Email doesn\'t exist.', category='error')
 
-    '''data = request.form
-    print(data)'''
     return render_template('login.html', user=current_user)
 
 @auth.route('/logout')
@@ -41,9 +39,9 @@ def sign_up():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
 
-        user = User.query.filter_by(email = email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
-            flash('Email already exist.', category='error')
+            flash('Email already exists.', category='error')
         elif len(email) < 4:
             flash('Email must be greater than 4 characters.', category='error')
         elif len(first_name) < 2:
@@ -57,7 +55,11 @@ def sign_up():
             db.session.add(new_user)
             db.session.commit()
 
-            login_user(user, remember=True)
-            flash('Account created!', category='success')
-            return redirect(url_for('views.home'))
+            # Fetch the new user from the database to ensure it's not None
+            new_user = User.query.filter_by(email=email).first()
+            if new_user:
+                login_user(new_user, remember=True)
+                flash('Account created!', category='success')
+                return redirect(url_for('views.home'))
+
     return render_template('sign_up.html', user=current_user)
